@@ -1,0 +1,31 @@
+CN POSITION|BUILDING       |FUNCTION
+---------------------------------------------------------------------------------
+01 042~044 |Tower          |Hancards limit can upgrade to 12.
+02 045~047 |Chapel         |You can put a handcard under your chapel every turn.
+03 048~050 |Smithy         |You can paid less(-1).
+04 051~053 |Poor house     |You can add a handcard, if your handcard <= one.
+05 054~056 |Black market   |You can use product as handcard.
+06 057~059 |Crane          |You can pay the spread of one of the buildings.
+           |               |Replace it(old building & product will be remove).
+07 060~062 |Carpenter      |Building a special building, you can add a handcard.
+08 063~065 |Quarry         |Building a special building, you can paid less(-1). 
+09 066~068 |Well           |You can add a handcard, if you have products >= 2.
+10 069~071 |Aquaduct       |You can produce again.
+11 072~074 |Market stand   |You can add a handcard, if you had sell >= 2.
+12 075~077 |Market hall    |You can add a handcard.
+13 078~080 |Trading post   |You can sell again.
+14 081~083 |Archive        |You can add card to handcard first then select.
+15 084~086 |Prefecture     |You can choose 2 of %d to be your handcard.
+16 087~089 |Gold mine      |You can pick 1 of 4 if the cost are all different.
+17 090~092 |Library[0]     |You can paid less(-2).
+           |Library[1]     |You can produce at most 3 products.
+           |Library[2]     |You can sell at most 3 products.
+           |Library[3]     |You choose 8 of 1 to be your handcard.
+           |Library[4]     |You can add 2 handcards.
+18 093~095 |Statue         |None
+19 096~098 |Victory column |None
+20 099~101 |Hero           |None
+21 102~103 |Guild hall     |A production building get 2 more point.
+22 104~105 |City hall      |A special building get 1 more point.
+23 106~107 |Triumphal arch |A kind monument : +4 Two : +6 Three : +8
+24 108~109 |Palace         |Plus 1/4 of the point.

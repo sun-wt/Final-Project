@@ -1,0 +1,50 @@
+$The production (colored) buildings:
+
+CN POSITION  BUILDING
+00 000~009   indigo plant
+00 010~017   sugar mill
+00 018~025   tobacco storage
+00 026~033   coffee roaster
+00 034~041   silver smelter
+-----------------------------------
+$The violet buildings:
+
+CN POSITION  BUILDING
+01 042~044   Tower
+02 045~047   Chapel
+**********************************
+03 048~050   Smithy
+04 051~053   Poor house
+05 054~056   Black market
+06 057~059   Crane
+07 060~062   Carpenter
+08 063~065   Quarry
+**********************************
+09 066~068   Well
+10 069~071   Aquaduct
+**********************************
+11 072~074   Market stand
+12 075~077   Market hall
+13 078~080   Trading post
+**********************************
+14 081~083   Archive
+15 084~086   Prefecture
+**********************************
+16 087~089   Gold mine
+***********************************
+17 090~092   Library
+-----------------------------------
+$The three   monuments:
+
+CN POSITION  BUILDING
+18 093~095   Statue
+19 096~098   Victory column
+20 099~101   Hero 
+-----------------------------------
+$The four value 6 buildings:
+
+CN POSITION  BUILDING
+21 102~103   Guild hall
+22 104~105   City hall
+23 106~107   Triumphal arch
+24 108~109   Palace
