@@ -1230,6 +1230,17 @@ int32_t normal_build( Player *ip )
     for(int i=0;i<ip->handcard_number;i++)
     {
         option[i] = 1;
+        for(int j=0;j<ip->table_number;j++)
+        {
+            if( Check_type(ip->handcard[i]) == ip->type[j] )
+            {
+                if( ip->type[j] )
+                {
+                    option[i] = 0;
+                    break;
+                }
+            }
+        }
         if( option[i] == 1 )
         {
             printf( "[%d]%d " , i , ip->handcard[i] );
@@ -1550,10 +1561,30 @@ int32_t crane_build( Player *ip )
     }
     printf( "\n-------------------------\n" );
     printf( "Which do you want to build from your hand card :\n" );
+    int32_t times = 0;
     for(int i=0;i<ip->handcard_number;i++)
     {
         option[i] = 1;
-        printf( "[%d]%d " , i , ip->handcard[i] );
+        for(int j=0;j<ip->table_number;j++)
+        {
+            if( Check_type(ip->handcard[i]) == ip->type[j] )
+            {
+                if( ip->type[j] )
+                {
+                    times++;
+                    if( times >= 2 )
+                    {
+                        option[i] = 0;
+                    }
+                    break;
+                }
+            }
+        }
+        if( option[i] == 1 )
+        {
+            printf( "[%d]%d " , i , ip->handcard[i] );
+        }
+        times = 0;
     }
     printf( "\n--> " ); //可以出的手牌
     if( scanf( "%d" , &wanted ) == 0 )
@@ -1617,6 +1648,35 @@ int32_t crane_build( Player *ip )
     }
     bool stop = 0;
     int32_t s2 = 0;
+    for(int i=0;i<ip->table_number;i++)
+    {
+        if( Check_type(target) )
+        {
+            if( ip->type[i] == Check_type(target) )
+            {
+                printf( "You can only replace Card%d , paid : %d.\n" , ip->table[i] , Card_Paid[ip->table_number] );
+                printf( "Continue (Y:1,N:0) ?" );
+                if( scanf( "%d" , &s2 ) == 0 )
+                {
+                    printf( "You input a string or a char.\n" );
+                    printf( "Game Over.\n" );
+                    exit(0);
+                }
+                if( s2 == 1 )
+                {
+                    stop = 1;
+                    replaced = i;
+                    need -= Card_Paid[ip->table[i]];
+                }
+                else
+                {
+                    printf( "Please wait for next turn.\n" );
+                    return 0;
+                }
+            }
+            break;
+        }
+    }
     if( stop == 0 )
     {
         printf( "Where do you want to replace ? \n" );
