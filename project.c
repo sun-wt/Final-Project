@@ -459,7 +459,6 @@ void Shuffle( int32_t number )
         //printf( "\n" );
         Type( &ip[i] );
     }
-    ip[0].handcard[0] = 90;
     Card_position += number;
 }
 
@@ -3355,8 +3354,8 @@ void Check_for_every_turn( Player *ip , int32_t number )
             {
                 if( ip->handcard_number > 0 )
                 {
-                    int32_t op = (rand()%2)+0;
-                    if( op )
+                    int32_t op = (rand()%4)+0;
+                    if( op == 2 )
                     {
                         ip->church[ip->church_number] = ip->handcard[0];
                         ip->church_number++;
