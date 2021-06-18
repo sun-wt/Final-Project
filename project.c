@@ -3772,7 +3772,7 @@ int main()
     }
     if( mod == 1 )
     {
-        mod = 2;
+        mod = 8;
     }
     else
     {
