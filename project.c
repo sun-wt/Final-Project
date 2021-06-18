@@ -1071,6 +1071,7 @@ void Q()
         char temp[size];
         fread( temp , size , 1 , fp );
         printf( "%s\n" , temp );
+        fclose( fp );
     }
     printf( "Check for cost (Y:1,N:0): " );
     if( scanf( "%d" , &num ) == 0 )
@@ -1138,6 +1139,7 @@ void Q()
         char temp[size];
         fread( temp , size , 1 , fp );
         printf( "%s\n" , temp );
+        fclose( fp );
     }
 }
 
@@ -1369,17 +1371,20 @@ int32_t normal_build( Player *ip )
                         printf( "Game Over.\n" );
                         exit(0);
                     }
-                    if( sure == 1 && count < ip->handcard_number )
+                    if( sure == 1 )
                     {
-                        Change( ip , count , 0 , 1 );
-                        need--;
-                        count--;
-                    }
-                    else if( sure == 1 && count >= ip->handcard_number )
-                    {
-                        Change( ip , count - ip->handcard_number , 1 , 1 );
-                        need--;
-                        count--;
+                        if( count < ip->handcard_number )
+                        {
+                            Change( ip , count , 0 , 1 );
+                            need--;
+                            count--;
+                        }
+                        else
+                        {
+                            Change( ip , count - ip->handcard_number , 1 , 1 );
+                            need--;
+                            count--;
+                        }
                     }
                     if( count == ip->handcard_number + ip->product_number )
                     {
@@ -1747,18 +1752,22 @@ int32_t crane_build( Player *ip )
                         printf( "Game Over.\n" );
                         exit(0);
                     }
-                    if( sure == 1 && count < ip->handcard_number )
+                    if( sure_1 == 1 )
                     {
-                        Change( ip , count , 0 , 1 );
-                        need--;
-                        count--;
+                        if( count < ip->handcard_number )
+                        {
+                            Change( ip , count , 0 , 1 );
+                            need--;
+                            count--;
+                        }
+                        else
+                        {
+                             Change( ip , count - ip->handcard_number , 1 , 1 );
+                            need--;
+                            count--;
+                        }
                     }
-                    else if( sure == 1 && count >= ip->handcard_number )
-                    {
-                        Change( ip , count - ip->handcard_number , 1 , 1 );
-                        need--;
-                        count--;
-                    }
+                    
                     if( count == ip->handcard_number + ip->product_number )
                     {
                         count = 0;
@@ -3175,69 +3184,87 @@ int32_t Other_behave( Player *ip , int32_t choose , Player *who , Player *Govern
     return 0;
 }
 
-void Check_for_every_turn( int32_t number )
+void Check_for_every_turn( Player *ip , int32_t number )
 {
     Type( ip );
-    printf( BLUE"The round is over.\nChecking......\n"NC );
+    if( ip->n == 0 )
+    {
+        printf( BLUE"The round is over.\nChecking......\n"NC );
+    }
     sleep(2);
     bool y_c = 0;
-    for(int i=0;i<number;i++)
+    for(int j=0;j<ip->table_number;j++)
     {
-        for(int j=0;j<ip->table_number;j++)
+        if( ip->type[j] == 1 )
         {
-            if( ip[i].type[j] == 1 )
+            ip->limit = 12;
+        }
+        if( ip->type[j] == 2 )
+        {
+            if( ip->n == 0 )
             {
-                ip[i].limit = 12;
-            }
-            if( ip[i].type[j] == 2 )
-            {
-                if( i == 0 )
+                if( ip->handcard_number > 0 )
                 {
-                    if( ip[i].handcard_number > 0 )
-                    {
-                        y_c = 1;
-                    }
+                    y_c = 1;
                 }
-                else
+            }
+            else
+            {
+                if( ip->handcard_number > 0 )
                 {
-                    if( ip[i].handcard_number > 0 )
+                    int32_t op = (rand()%2)+0;
+                    if( op )
                     {
-                        ip[i].church[ip[i].church_number] = ip->handcard[0];
+                        ip->church[ip->church_number] = ip->handcard[0];
                         ip->church_number++;
-                        Change( &ip[i] , 0 , 0 , 0 );
+                        Change( ip , 0 , 0 , 0 );
                     }
                 }
             }
         }
     }
-    if( ip[0].limit < ip[0].handcard_number )
+    if( ip->limit < ip->handcard_number )
     {
-        int32_t need = ip[0].handcard_number-ip[0].limit;
-        printf( "You need to dispose %d cards\n" , need );
-        printf( "Dispose :\n" );
-        int32_t count = 0;
-        int32_t sure = 0;
-        while( need != 0 )
+        if( ip->n == 0 )
         {
-            printf( "Card%d(Yes:1,No:0) :" , ip->handcard[count] ); 
-            if( scanf( "%d" , &sure ) == 0 )
+            int32_t need = ip->handcard_number-ip->limit;
+            printf( "You need to dispose %d cards\n" , need );
+            printf( "Dispose :\n" );
+            int32_t count = 0;
+            int32_t sure = 0;
+            while( need != 0 )
             {
-                printf( "You input a string or a char.\n" );
-                printf( "Game Over.\n" );
-                exit(0);
+                printf( "Card%d(Yes:1,No:0) :" , ip->handcard[count] ); 
+                if( scanf( "%d" , &sure ) == 0 )
+                {
+                    printf( "You input a string or a char.\n" );
+                    printf( "Game Over.\n" );
+                    exit(0);
+                }
+                if( sure == 1 )
+                {
+                    Change( ip , count , 0 , 1 );
+                    need--;
+                }
+                else
+                {
+                    count++;
+                }
+                if( count == ip->handcard_number )
+                {
+                    count = 0;
+                }
             }
-            if( sure == 1 )
+        }
+        else
+        {
+            if( ip->limit < ip->handcard_number )
             {
-                Change( ip , count , 0 , 1 );
-                need--;
-            }
-            else
-            {
-                count++;
-            }
-            if( count == ip->handcard_number )
-            {
-                count = 0;
+                for(int j=0;j<ip->handcard_number-ip->limit;j++)
+                {
+                    int32_t ramdom = (rand()%(ip->handcard_number)) + 0;
+                    Change( ip , ramdom , 0 , 1 );
+                }
             }
         }
     }
@@ -3246,9 +3273,9 @@ void Check_for_every_turn( int32_t number )
         printf( PURPLE"Due to Chapel : \n"NC );
         printf( "You can put a handcard under your chapel.\n" );
         int32_t wanted = 0;
-        for(int i=0;i<ip[0].handcard_number;i++)
+        for(int i=0;i<ip->handcard_number;i++)
         {
-            printf( "[%d]%d " , i , ip[0].handcard[i] );
+            printf( "[%d]%d " , i , ip->handcard[i] );
         }
         printf( "\n" );
         if( scanf( "%d" , &wanted ) == 0 )
@@ -3259,29 +3286,28 @@ void Check_for_every_turn( int32_t number )
         }
         if( wanted >= 0 && wanted < ip->handcard_number )
         {
-            ip[0].church[ip[0].church_number] = ip[0].handcard[wanted];
-            Change( &ip[0] , wanted , 0 , 0 );
-            ip[0].church_number++;
+            ip->church[ip->church_number] = ip->handcard[wanted];
+            Change( ip , wanted , 0 , 0 );
+            ip->church_number++;
         }
         else
         {
             printf( "You lose the chance for this.\n" );
         }
     }
-    printf( "You done.\n" );
-    for(int i=1;i<number;i++)
+
+    if( ip->n )
     {
-        if( ip[i].limit < ip[i].handcard_number )
-        {
-            for(int j=0;j<ip[i].handcard_number-ip[i].limit;j++)
-            {
-                int32_t ramdom = (rand()%(ip[i].handcard_number)) + 0;
-                Change( &ip[i] , ramdom , 0 , 1 );
-            }
-        }
-        printf( "Com%d done.\n" , i );
-    }                                  
-    printf( BLUE"Done\n"NC );
+        printf( "Com%d done.\n" , ip->n );
+    }  
+    else
+    {
+        printf( "You done.\n" );
+    }                         
+    if( ip->n == number-1 )
+    {
+        printf( BLUE"Done\n"NC );
+    }
 }
 
 int32_t Your_Role( Player *ip )
@@ -3619,112 +3645,98 @@ int32_t Other_Role( Player *ip )
     return choose;
 }
 
-int32_t Champion( int32_t number )
+void Champion( Player *ip )
 {
     Type( ip );
-    printf( "Game ended successly.\n" );
-    for(int i=0;i<number;i++)
+    bool s1 = 0; //同業會館
+    bool s2 = 0; //市政廳
+    bool s3 = 0; //凱旋門
+    bool s4 = 0; //宮殿
+    for(int j=0;j<ip->table_number;j++)
     {
-        bool s1 = 0; //同業會館
-        bool s2 = 0; //市政廳
-        bool s3 = 0; //凱旋門
-        bool s4 = 0; //宮殿
-        for(int j=0;j<ip[i].table_number;j++)
+        ip->score += Card_Point[ip->table[j]];
+        ip->score += ip->church_number;
+        if( ip->type[j] == 21 )
         {
-            ip[i].score += Card_Point[ip[i].table[j]];
-            ip[i].score += ip[i].church_number;
-            if( ip[i].type[j] == 21 )
-            {
-                s1 = 1;
-            }
-            if( ip[i].type[j] == 22 )
-            {
-                s2 = 1;
-            }
-            if( ip[i].type[j] == 23 )
-            {
-                s3 = 1;
-            }
-            if( ip[i].type[j] == 24 )
-            {
-                s4 = 1;
-            }
+            s1 = 1;
         }
-        for(int j=0;j<ip[i].church_number;j++)
+        if( ip->type[j] == 22 )
         {
-            ip[i].score++;
+            s2 = 1;
         }
-        if( s1 )
+        if( ip->type[j] == 23 )
         {
-            for(int j=0;j<ip[i].table_number;j++)
-            {
-                if( special(ip[i].table[i]) == 0 )
-                {
-                    ip[i].score += 2;
-                }
-            }
+            s3 = 1;
         }
-        if( s2 )
+        if( ip->type[j] == 24 )
         {
-            for(int j=0;j<ip[i].table_number;j++)
-            {
-                if( special(ip[i].table[i]) )
-                {
-                    ip[i].score ++;
-                }
-            }
-        }
-        if( s3 )
-        {
-            bool m1 = 0;
-            bool m2 = 0;
-            bool m3 = 0;
-            for(int j=0;j<ip[i].table_number;j++)
-            {
-                if( ip[i].type[j] == 18 )
-                {
-                    m1 = 1;
-                }
-                if( ip[i].type[j] == 19 )
-                {
-                    m2 = 1;
-                }
-                if( ip[i].type[j] == 20 )
-                {
-                    m3 = 1;
-                }
-
-            }
-            if( m1 + m2 + m3 == 3 )
-            {
-                ip[i].score += 8;
-            }
-            else if( m1 + m2 + m3 == 2 )
-            {
-                ip[i].score += 6;
-            }
-            else if( m1 + m2 + m3 == 1 )
-            {
-                ip[i].score += 4;
-            }
-        }
-        if( s4 )
-        {
-            ip[i].score /= 4;
+            s4 = 1;
         }
     }
-    int32_t max = 0;
-    int32_t champion = 0;
-    for(int i=0;i<number;i++)
+    for(int j=0;j<ip->church_number;j++)
     {
-        printf( "Player%d : %d points.\n" , i+1 , ip[i].score );
-        if( ip[i].score > max )
+        ip->score++;
+    }
+    if( s1 )
+    {
+        for(int j=0;j<ip->table_number;j++)
         {
-            max = ip[i].score;
-            champion = i;
+            if( special(ip->table[j]) == 0 )
+            {
+                ip->score += 2;
+            }
         }
     }
-    return champion;
+    if( s2 )
+    {
+        for(int j=0;j<ip->table_number;j++)
+        {
+            if( special(ip->table[j]) )
+            {
+                ip->score ++;
+            }
+        }
+    }
+    if( s3 )
+    {
+        bool m1 = 0;
+        bool m2 = 0;
+        bool m3 = 0;
+        for(int j=0;j<ip->table_number;j++)
+        {
+            if( ip->type[j] == 18 )
+            {
+                m1 = 1;
+            }
+            if( ip->type[j] == 19 )
+            {
+                m2 = 1;
+            }
+            if( ip->type[j] == 20 )
+            {
+                m3 = 1;
+            }
+        }
+        if( m1 + m2 + m3 == 3 )
+        {
+            ip->score += 8;
+        }
+        else if( m1 + m2 + m3 == 2 )
+        {
+            ip->score += 6;
+        }
+        else if( m1 + m2 + m3 == 1 )
+        {
+            ip->score += 4;
+        }
+    }
+    if( s4 )
+    {
+        ip->score /= 4;
+    }
+    
+    printf( "Player%d : %d points.\n" , ip->n , ip->score );
+    
 }
 
 int main() 
@@ -3760,7 +3772,7 @@ int main()
     }
     if( mod == 1 )
     {
-        mod = 8;
+        mod = 2;
     }
     else
     {
@@ -3874,7 +3886,10 @@ int main()
             {
                 break;
             }
-            Check_for_every_turn( number );
+            for(int i=0;i<number;i++)
+            {
+                Check_for_every_turn( &ip[i] , number );
+            }
             Governor++;
         }
         else if( Governor == 1 )
@@ -3932,7 +3947,10 @@ int main()
                 break;
             }
             Print_surface( ip );
-            Check_for_every_turn( number );
+            for(int i=0;i<number;i++)
+            {
+                Check_for_every_turn( &ip[i] , number );
+            }
             Governor++;
         }
         else if( Governor == 2 )
@@ -4009,7 +4027,10 @@ int main()
                 break;
             }
             Print_surface( ip );
-            Check_for_every_turn( number );
+            for(int i=0;i<number;i++)
+            {
+                Check_for_every_turn( &ip[i] , number );
+            }
             Governor++;
         }
         else 
@@ -4086,7 +4107,10 @@ int main()
             {
                 break;
             }
-            Check_for_every_turn( number );  
+            for(int i=0;i<number;i++)
+            {
+                Check_for_every_turn( &ip[i] , number );
+            } 
             Governor = 0;
         }
         memset( state_g , 0 , number );
@@ -4109,6 +4133,24 @@ int main()
     }
     printf( "Result is .....\n" );
     sleep(1);
-    printf( RED"Champion : Player %d!\n"NC , Champion(number) );
+    for(int i=0;i<number;i++)
+    {
+        Champion( &ip[i] );
+    }
+    int32_t champion = 0;
+    for(int i=0;i<number;i++)
+    {
+        if( ip[i].score > champion )
+        {
+            champion = ip->score;
+        }
+    }
+    for(int i=0;i<number;i++)
+    {
+        if( ip[i].score == champion )
+        {
+            printf( RED"Champion : Player %d!\n"NC , ip[i].n );
+        }
+    }
     return 0;
 }
