@@ -484,6 +484,7 @@ int32_t Shuffle_again( int32_t last )
         Card_Dispose[ramdom[i]] = 0;
         last++;
     }
+    
     Card_D_p = 0;
     return last;
 }
@@ -1202,7 +1203,7 @@ int32_t normal_build( Player *ip )
     if( ip->handcard_number == 0 )
     {
         printf( "Oops! You don't have any handcards\n" );
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     printf( "-------------------------\n" );
@@ -1294,14 +1295,14 @@ int32_t normal_build( Player *ip )
         else //不可以蓋的地方
         {
             printf( "Wrong instruction.\n" );
-            printf( "Please wait for next turn.\n" );
+            printf( "Please wait for next turn.\n\n" );
             return 0;
         }
     }
     else //不在範圍
     {
         printf( "Wrong instruction.\n" );
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );;
         return 0;
     }
     if( s1 )
@@ -1412,6 +1413,7 @@ int32_t normal_build( Player *ip )
                     }
                     count++;
                 }
+                printf( "\n" );
                 ip->table[ip->table_number] = target;
                 ip->table_number++;
                 for(int i=0;i<ip->table_number;i++)
@@ -1481,6 +1483,7 @@ int32_t normal_build( Player *ip )
                 }
                 ip->table[ip->table_number] = target;
                 ip->table_number++;
+                printf( "\n" );
                 for(int i=0;i<ip->table_number;i++)
                 {
                     if( ip->type[i] == 4 )
@@ -1531,7 +1534,7 @@ int32_t crane_build( Player *ip )
     if( ip->handcard_number == 0 )
     {
         printf( "Oops! You don't have any handcards\n" );
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     printf( "-------------------------\n" );
@@ -1635,14 +1638,14 @@ int32_t crane_build( Player *ip )
         else //不可以蓋的地方
         {
             printf( "Wrong instruction.\n" );
-            printf( "Please wait for next turn.\n" );
+            printf( "Please wait for next turn.\n\n" );
             return 0;
         }
     }
     else //不在範圍
     {
         printf( "Wrong instruction.\n" );
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     bool stop = 0;
@@ -1669,9 +1672,10 @@ int32_t crane_build( Player *ip )
                 }
                 else
                 {
-                    printf( "Please wait for next turn.\n" );
+                    printf( "Please wait for next turn.\n\n" );
                     return 0;
                 }
+                
             }
             break;
         }
@@ -1693,7 +1697,7 @@ int32_t crane_build( Player *ip )
         if( replaced < 0 || replaced >= ip->table_number )
         {
             printf( "Wrong instruction.\n" );
-            printf( "Please wait for next turn.\n" );
+            printf( "Please wait for next turn.\n\n" );
             return 0;
         }
         else
@@ -1757,7 +1761,7 @@ int32_t crane_build( Player *ip )
 
         if( need <= 0 )
         {
-            printf( "You get a free building.\n" );
+            printf( "You get a free building.\n\n" );
             Card_Dispose[Card_D_p] = ip->table[replaced];
             Card_D_p++;
             ip->table[replaced] = target;
@@ -1816,6 +1820,7 @@ int32_t crane_build( Player *ip )
                 Card_Dispose[Card_D_p] = ip->table[replaced];
                 Card_D_p++;
                 ip->table[replaced] = target;
+                printf( "\n" );
                 Type( ip );
                 for(int i=0;i<ip->table_number;i++)
                 {
@@ -1886,6 +1891,7 @@ int32_t crane_build( Player *ip )
                 Card_D_p++;
                 ip->table[replaced] = target;
                 Type( ip );
+                printf( "\n" );
                 for(int i=0;i<ip->table_number;i++)
                 {
                     if( ip->type[i] == 4 )
@@ -1969,7 +1975,7 @@ int32_t Your_Builder( Player *ip )
     }
     else //不蓋
     {
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     if( Check_type(target) == 1 )
@@ -2023,7 +2029,7 @@ int32_t Your_Producer( Player *ip )
     }
     else
     {
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     if( Switch == 1 )
@@ -2056,19 +2062,19 @@ int32_t Your_Producer( Player *ip )
             }
             else
             {
-                printf( "Please wait for next turn.\n" );
+                printf( "Please wait for next turn.\n\n" );
                 return 0;
             }
         }
         else
         {
-            printf( "Please wait for next turn.\n" );
+            printf( "Please wait for next turn.\n\n" );
             return 0;
         }
     }
     else
     {
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     return 1;
@@ -2098,7 +2104,7 @@ int32_t Your_Trader( Player *ip )
     }
     else
     {
-        printf( "Please wait for next turn.\n" );
+        printf( "Please wait for next turn.\n\n" );
         return 0;
     }
     if( Switch )
@@ -2197,6 +2203,7 @@ int32_t Your_Councillor( Player *ip , bool option )
             exit(0);
         }
     }
+    printf( "\n" );
     if( sure + option == 2 )
     {
         number = 5;
@@ -2306,7 +2313,7 @@ int32_t Your_Councillor( Player *ip , bool option )
             ip->handcard_number++;
             Card_position++;
         }
-        printf( "Dispose %d times : " , number - 1 );
+        printf( "\nDispose %d times : \n" , number - 1 );
         int32_t need = number - 1;
         int32_t count = 0;
         int32_t sure_1 = 0;     
@@ -2462,7 +2469,7 @@ int32_t Your_Prospector( Player *ip , int32_t who )
         }
         else
         {
-            printf( "Please wait for next turn.\n" );
+            printf( "Please wait for next turn.\n\n" );
             return 0;
         }
     }
@@ -2640,7 +2647,7 @@ int32_t Other_Builder( Player *ip )
                 }
                 
                 printf( "$Com%d choose to build %d replace %d.\nDispose : " , ip->n , target , ip->table[replaced] );
-                if( need == 0 )
+                if( need <= 0 )
                 {
                     printf( "None.\n" );
                 }
@@ -2669,7 +2676,7 @@ int32_t Other_Builder( Player *ip )
             else
             {
                 printf( "$Com%d choose to build %d.\nDispose : " , ip->n , target );
-                if( need == 0 )
+                if( need <= 0 )
                 {
                     printf( "None.\n" );
                 }
@@ -3841,6 +3848,7 @@ int32_t Other_Role( Player *ip )
 
 void Champion( Player *ip )
 {
+    printf( "Player%d : \n" , ip->n );
     Type( ip );
     bool s1 = 0; //同業會館
     bool s2 = 0; //市政廳
@@ -3849,7 +3857,7 @@ void Champion( Player *ip )
     for(int j=0;j<ip->table_number;j++)
     {
         ip->score += Card_Point[ip->table[j]];
-        ip->score += ip->church_number;
+        printf( " [%d]%d +", ip->table[j] , Card_Point[ip->table[j]] );
         if( ip->type[j] == 21 )
         {
             s1 = 1;
@@ -3871,23 +3879,29 @@ void Champion( Player *ip )
     {
         ip->score++;
     }
+    printf( " [ch]%d " , ip->church_number );
     if( s1 )
     {
+        int32_t count_1 = 0;
         for(int j=0;j<ip->table_number;j++)
         {
             if( special(ip->table[j]) == 0 )
             {
                 ip->score += 2;
+                count_1++;
             }
+            printf( " + [s1]%d " , count_1*2 );
         }
     }
     if( s2 )
     {
+        int32_t count_2 = 0;
         for(int j=0;j<ip->table_number;j++)
         {
             if( special(ip->table[j]) )
             {
                 ip->score ++;
+                printf( " + [s2]%d " , count_2*2 );
             }
         }
     }
@@ -3914,22 +3928,26 @@ void Champion( Player *ip )
         if( m1 + m2 + m3 == 3 )
         {
             ip->score += 8;
+            printf( " + [s3]8 " );
         }
         else if( m1 + m2 + m3 == 2 )
         {
             ip->score += 6;
+            printf( " + [s3]6 " );
         }
         else if( m1 + m2 + m3 == 1 )
         {
             ip->score += 4;
+            printf( " + [s3]4 " );
         }
     }
     if( s4 )
     {
-        ip->score /= 4;
+        ip->score = ip->score + ip->score / 4 ;
+        printf( " --> * 1(1/4) " );
     }
     
-    printf( "Player%d : %d points.\n" , ip->n , ip->score );
+    printf( " = %d points.\n" , ip->score );
     
 }
 
@@ -3956,7 +3974,7 @@ int main()
             exit(0);
         }
     }
-    printf("If you don't have so much time, you can choose a shorter version.(8 cards end the game).\n" );
+    printf("\nIf you don't have so much time, you can choose a shorter version.(8 cards end the game).\n" );
     printf( "[ Normal:any integer , Shorter:1 ] version : " );
     if( scanf( "%d" , &mod ) == 0 )
     {
@@ -3966,14 +3984,14 @@ int main()
     }
     if( mod == 1 )
     {
-        mod = 8;
+        mod = 2;
     }
     else
     {
         mod = 12;
     }
 
-    printf( "Computer dificulty :\n" );
+    printf( "\nComputer dificulty :\n" );
     
     for(int i=1;i<number;i++)
     {
