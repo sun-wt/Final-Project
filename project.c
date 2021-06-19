@@ -3951,6 +3951,15 @@ void Champion( Player *ip )
     
 }
 
+void Champion_again( Player *ip )
+{
+    printf( "Player%d : \n" , ip->n );
+    ip->score += ip->handcard_number;
+    printf( "[h]%d + " , ip->handcard_number );
+    ip->score += ip->product_number;
+    printf( "[p]%d " , ip->product_number );
+    printf( "= %d points\n" , ip->score );
+}
 int main() 
 {
     int32_t number;
@@ -3984,7 +3993,7 @@ int main()
     }
     if( mod == 1 )
     {
-        mod = 2;
+        mod = 8;
     }
     else
     {
@@ -4350,19 +4359,52 @@ int main()
         Champion( &ip[i] );
     }
     int32_t champion = 0;
+    int32_t champion_player = 0;
     for(int i=0;i<number;i++)
     {
         if( ip[i].score > champion )
         {
-            champion = ip->score;
+            champion = ip[i].score;
         }
     }
+    int32_t count_champion = -1;
     for(int i=0;i<number;i++)
     {
         if( ip[i].score == champion )
         {
-            printf( RED"Champion : Player %d!\n"NC , ip[i].n );
+            count_champion++;
+            champion_player = ip[i].n;
         }
+    }
+    if( count_champion )
+    {
+        printf( "Due to the points are same , will add handcard and product.\n" );
+        for(int i=0;i<number;i++)
+        {
+            if( ip[i].score == champion )
+            {
+                Champion_again( &ip[i] );
+            }
+        }
+        for(int i=0;i<number;i++)
+        {
+            if( ip[i].score > champion )
+            {
+                champion = ip[i].score;
+            }
+        }
+        for(int i=0;i<number;i++)
+        {
+            if( ip[i].score == champion )
+            {
+                printf( RED"Champion : Player %d!\n"NC , champion_player );
+            }
+        }
+    }
+    else
+    {
+        
+        printf( RED"Champion : Player %d!\n"NC , champion_player );
     }
     return 0;
 }
