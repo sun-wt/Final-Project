@@ -50,7 +50,7 @@
 
 
 char *RP = "Role playcards: ";
-int32_t Card[500]; //牌庫
+int32_t Card[1000]; //牌庫
 int32_t Card_position = 0;
 int32_t Card_Dispose[110]; //棄牌
 int32_t Card_D_p = 0;
